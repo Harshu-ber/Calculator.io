@@ -3,6 +3,7 @@
 <head>
 <title>Calculator Hub Pro</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 body {
   margin: 0;
@@ -18,39 +19,47 @@ h1 {
 
 .section {
   background: #1e293b;
-  margin: 20px;
+  margin: 20px auto;
   padding: 20px;
   border-radius: 15px;
+  max-width: 400px;
   box-shadow: 0 0 10px #000;
 }
 
 input {
-  width: 80%;
+  width: 90%;
   height: 45px;
   font-size: 18px;
-  margin: 10px;
+  margin: 10px 0;
   border-radius: 10px;
   border: none;
   text-align: center;
 }
 
+.calc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
 button {
-  width: 60px;
+  width: 100%;
   height: 60px;
   font-size: 18px;
-  margin: 5px;
-  border-radius: 12px;
+  border-radius: 10px;
   border: none;
   background: #22c55e;
   color: white;
 }
 
-button:hover {
+button:active {
   background: #16a34a;
 }
 
 .big-btn {
-  width: 120px;
+  width: 100%;
+  height: 50px;
+  margin-top: 10px;
 }
 </style>
 </head>
@@ -62,27 +71,30 @@ button:hover {
 <!-- BASIC CALCULATOR -->
 <div class="section">
 <h2>Basic Calculator</h2>
-<input type="text" id="result" disabled><br>
 
+<input type="text" id="result" disabled>
+
+<div class="calc-grid">
 <button onclick="add('7')">7</button>
 <button onclick="add('8')">8</button>
 <button onclick="add('9')">9</button>
-<button onclick="add('/')">/</button><br>
+<button onclick="add('/')">/</button>
 
 <button onclick="add('4')">4</button>
 <button onclick="add('5')">5</button>
 <button onclick="add('6')">6</button>
-<button onclick="add('*')">*</button><br>
+<button onclick="add('*')">*</button>
 
 <button onclick="add('1')">1</button>
 <button onclick="add('2')">2</button>
 <button onclick="add('3')">3</button>
-<button onclick="add('-')">-</button><br>
+<button onclick="add('-')">-</button>
 
 <button onclick="add('0')">0</button>
 <button onclick="calculate()">=</button>
 <button onclick="clearResult()">C</button>
 <button onclick="add('+')">+</button>
+</div>
 </div>
 
 <!-- PERCENTAGE -->
@@ -90,7 +102,6 @@ button:hover {
 <h2>Percentage Calculator</h2>
 <input type="number" id="num" placeholder="Enter number">
 <input type="number" id="percent" placeholder="Enter %">
-<br>
 <button class="big-btn" onclick="calcPercent()">Calculate</button>
 <h3 id="percentResult"></h3>
 </div>
@@ -99,7 +110,6 @@ button:hover {
 <div class="section">
 <h2>Age Calculator</h2>
 <input type="date" id="dob">
-<br>
 <button class="big-btn" onclick="calcAge()">Find Age</button>
 <h3 id="ageResult"></h3>
 </div>
@@ -109,7 +119,6 @@ button:hover {
 <h2>BMI Calculator</h2>
 <input type="number" id="weight" placeholder="Weight (kg)">
 <input type="number" id="height" placeholder="Height (cm)">
-<br>
 <button class="big-btn" onclick="calcBMI()">Check BMI</button>
 <h3 id="bmiResult"></h3>
 </div>
