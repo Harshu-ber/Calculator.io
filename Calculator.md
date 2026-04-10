@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Pro Calculator Hub</title>
+<title>Calculator Hub Pro</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body {
+  margin: 0;
   font-family: Arial;
-  text-align: center;
-  background: #0f172a;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
   color: white;
+  text-align: center;
 }
 
 h1 {
-  margin-top: 20px;
+  padding: 20px;
 }
 
-.container {
-  margin-top: 20px;
+.section {
+  background: #1e293b;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 10px #000;
 }
 
 input {
-  width: 250px;
-  height: 40px;
+  width: 80%;
+  height: 45px;
   font-size: 18px;
   margin: 10px;
+  border-radius: 10px;
+  border: none;
   text-align: center;
 }
 
@@ -32,70 +39,84 @@ button {
   height: 60px;
   font-size: 18px;
   margin: 5px;
-  border-radius: 10px;
+  border-radius: 12px;
   border: none;
   background: #22c55e;
   color: white;
 }
 
-.section {
-  margin-top: 30px;
-  padding: 20px;
-  border: 1px solid #334155;
-  border-radius: 10px;
+button:hover {
+  background: #16a34a;
+}
+
+.big-btn {
+  width: 120px;
 }
 </style>
 </head>
+
 <body>
 
-<h1>🔥 Calculator Hub</h1>
+<h1>🔥 Calculator Hub Pro</h1>
 
 <!-- BASIC CALCULATOR -->
 <div class="section">
 <h2>Basic Calculator</h2>
 <input type="text" id="result" disabled><br>
 
-<button onclick="add('1')">1</button>
-<button onclick="add('2')">2</button>
-<button onclick="add('3')">3</button>
-<button onclick="add('+')">+</button><br>
+<button onclick="add('7')">7</button>
+<button onclick="add('8')">8</button>
+<button onclick="add('9')">9</button>
+<button onclick="add('/')">/</button><br>
 
 <button onclick="add('4')">4</button>
 <button onclick="add('5')">5</button>
 <button onclick="add('6')">6</button>
-<button onclick="add('-')">-</button><br>
-
-<button onclick="add('7')">7</button>
-<button onclick="add('8')">8</button>
-<button onclick="add('9')">9</button>
 <button onclick="add('*')">*</button><br>
+
+<button onclick="add('1')">1</button>
+<button onclick="add('2')">2</button>
+<button onclick="add('3')">3</button>
+<button onclick="add('-')">-</button><br>
 
 <button onclick="add('0')">0</button>
 <button onclick="calculate()">=</button>
 <button onclick="clearResult()">C</button>
-<button onclick="add('/')">/</button>
+<button onclick="add('+')">+</button>
 </div>
 
-<!-- PERCENTAGE CALCULATOR -->
+<!-- PERCENTAGE -->
 <div class="section">
 <h2>Percentage Calculator</h2>
 <input type="number" id="num" placeholder="Enter number">
-<input type="number" id="percent" placeholder="%"><br>
-<button onclick="calcPercent()">Calculate</button>
+<input type="number" id="percent" placeholder="Enter %">
+<br>
+<button class="big-btn" onclick="calcPercent()">Calculate</button>
 <h3 id="percentResult"></h3>
 </div>
 
-<!-- AGE CALCULATOR -->
+<!-- AGE -->
 <div class="section">
 <h2>Age Calculator</h2>
-<input type="date" id="dob"><br>
-<button onclick="calcAge()">Find Age</button>
+<input type="date" id="dob">
+<br>
+<button class="big-btn" onclick="calcAge()">Find Age</button>
 <h3 id="ageResult"></h3>
 </div>
 
+<!-- BMI -->
+<div class="section">
+<h2>BMI Calculator</h2>
+<input type="number" id="weight" placeholder="Weight (kg)">
+<input type="number" id="height" placeholder="Height (cm)">
+<br>
+<button class="big-btn" onclick="calcBMI()">Check BMI</button>
+<h3 id="bmiResult"></h3>
+</div>
+
 <script>
-function add(value){
-  document.getElementById("result").value += value;
+function add(val){
+  document.getElementById("result").value += val;
 }
 
 function calculate(){
@@ -109,9 +130,9 @@ function clearResult(){
 
 function calcPercent(){
   let num = document.getElementById("num").value;
-  let percent = document.getElementById("percent").value;
-  let result = (num * percent) / 100;
-  document.getElementById("percentResult").innerText = "Result: " + result;
+  let per = document.getElementById("percent").value;
+  let res = (num * per) / 100;
+  document.getElementById("percentResult").innerText = "Result: " + res;
 }
 
 function calcAge(){
@@ -119,6 +140,13 @@ function calcAge(){
   let today = new Date();
   let age = today.getFullYear() - dob.getFullYear();
   document.getElementById("ageResult").innerText = "Age: " + age + " years";
+}
+
+function calcBMI(){
+  let w = document.getElementById("weight").value;
+  let h = document.getElementById("height").value / 100;
+  let bmi = (w / (h*h)).toFixed(2);
+  document.getElementById("bmiResult").innerText = "BMI: " + bmi;
 }
 </script>
 
