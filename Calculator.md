@@ -1,78 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Student Quiz Hub</title>
+<title>🔥 AI Quiz Pro</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-  font-family: Arial;
-  background: linear-gradient(135deg,#0f172a,#1e293b);
-  color: white;
-  text-align: center;
-  animation: fadeIn 1s ease-in;
+body{
+  margin:0;
+  font-family:-apple-system, BlinkMacSystemFont;
+  background:#0a0a0a;
+  color:white;
+  text-align:center;
 }
 
-@keyframes fadeIn {
-  from {opacity:0;}
-  to {opacity:1;}
+h1{
+  padding:20px;
+  color:#ff3b3b;
 }
 
-.container {
-  padding: 20px;
+.card{
+  background:#111;
+  margin:15px auto;
+  padding:20px;
+  border-radius:20px;
+  max-width:420px;
+  box-shadow:0 0 20px rgba(255,0,0,0.3);
+  animation:fade 0.6s ease;
 }
 
-select, button {
-  padding: 10px;
-  margin: 10px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: none;
+@keyframes fade{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
 }
 
-button {
-  background: #22c55e;
-  color: white;
-  transition: 0.3s;
+select,button{
+  width:90%;
+  padding:12px;
+  margin:10px;
+  border-radius:12px;
+  border:none;
+  font-size:16px;
 }
 
-button:hover {
-  transform: scale(1.1);
+button{
+  background:#ff3b3b;
+  color:white;
+  transition:0.3s;
 }
 
-.question {
-  margin: 15px 0;
-  text-align: left;
-  animation: slideUp 0.5s ease;
+button:hover{
+  transform:scale(1.05);
 }
 
-@keyframes slideUp {
-  from {transform: translateY(20px); opacity:0;}
-  to {transform: translateY(0); opacity:1;}
+.question{
+  text-align:left;
+  margin:10px 0;
+}
+
+.result{
+  font-size:20px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>📚 Student Quiz Hub</h1>
+<h1>🔥 AI Quiz Pro</h1>
 
-<div class="container" id="setup">
-
-<select id="subject">
-<option>Maths</option>
-<option>Science</option>
-<option>SST</option>
-<option>English</option>
-</select>
+<div class="card" id="setup">
 
 <select id="count">
-<option value="5">5</option>
-<option value="10">10</option>
-<option value="20">20</option>
+<option value="10">10 MCQ</option>
+<option value="20">20 MCQ</option>
+<option value="50">50 MCQ</option>
+<option value="100">100 MCQ</option>
 </select>
 
-<br>
 <button onclick="startQuiz()">Start Quiz</button>
 
 </div>
@@ -81,69 +84,77 @@ button:hover {
 
 <script>
 
-let questions = [
-{subject:"Maths", q:"2+2=?", options:["3","4","5","6"], answer:"4"},
-{subject:"Maths", q:"5x5=?", options:["20","25","30","35"], answer:"25"},
-{subject:"Science", q:"H2O is?", options:["Water","Oxygen","Hydrogen","Salt"], answer:"Water"},
-{subject:"Science", q:"Sun is?", options:["Planet","Star","Moon","Gas"], answer:"Star"},
-{subject:"SST", q:"Capital of India?", options:["Delhi","Mumbai","Kolkata","Chennai"], answer:"Delhi"},
-{subject:"English", q:"Opposite of big?", options:["Small","Tall","Short","Fat"], answer:"Small"},
-{subject:"Maths", q:"10/2=?", options:["2","3","5","6"], answer:"5"},
-{subject:"Science", q:"Earth is?", options:["Star","Planet","Galaxy","Moon"], answer:"Planet"},
-{subject:"SST", q:"India got independence in?", options:["1947","1950","1930","1960"], answer:"1947"},
-{subject:"English", q:"Plural of child?", options:["Childs","Children","Childes","Child"], answer:"Children"}
-];
+// MASSIVE QUESTION GENERATOR
+function generateQuestions(n){
+  let arr = [];
+  for(let i=1;i<=n;i++){
+    let a = Math.floor(Math.random()*20)+1;
+    let b = Math.floor(Math.random()*20)+1;
+    let correct = a + b;
 
-let selected = [];
+    let options = [
+      correct,
+      correct+1,
+      correct-1,
+      correct+2
+    ].sort(()=>0.5-Math.random());
+
+    arr.push({
+      q: `${a} + ${b} = ?`,
+      options: options,
+      answer: correct
+    });
+  }
+  return arr;
+}
+
+let selected=[];
 
 function startQuiz(){
-  document.getElementById("setup").style.display="none";
-
-  let subject = document.getElementById("subject").value;
   let count = parseInt(document.getElementById("count").value);
 
-  let filtered = questions.filter(q => q.subject === subject);
+  document.getElementById("setup").style.display="none";
 
-  selected = filtered.sort(() => 0.5 - Math.random()).slice(0, count);
+  selected = generateQuestions(count);
 
-  let html = "";
+  let html="";
 
   selected.forEach((q,i)=>{
-    html += `<div class="question">
+    html+=`<div class="card question">
     <p>${i+1}. ${q.q}</p>`;
 
     q.options.forEach(opt=>{
-      html += `<input type="radio" name="q${i}" value="${opt}"> ${opt}<br>`;
+      html+=`<input type="radio" name="q${i}" value="${opt}"> ${opt}<br>`;
     });
 
-    html += "</div>";
+    html+="</div>";
   });
 
-  html += `<button onclick="submitQuiz()">Submit</button>`;
+  html+=`<button onclick="submitQuiz()">Submit</button>`;
 
-  document.getElementById("quiz").innerHTML = html;
+  document.getElementById("quiz").innerHTML=html;
 }
 
 function submitQuiz(){
-  let score = 0;
+  let score=0;
 
   selected.forEach((q,i)=>{
-    let ans = document.querySelector(`input[name="q${i}"]:checked`);
-    if(ans && ans.value === q.answer){
+    let ans=document.querySelector(`input[name="q${i}"]:checked`);
+    if(ans && parseInt(ans.value)===q.answer){
       score++;
     }
   });
 
-  let percent = (score/selected.length)*100;
+  let percent=(score/selected.length)*100;
 
-  document.getElementById("quiz").innerHTML = `
+  document.getElementById("quiz").innerHTML=`
+  <div class="card result">
   <h2>🎯 Result</h2>
   <p>Correct: ${score}</p>
   <p>Total: ${selected.length}</p>
   <p>Percentage: ${percent.toFixed(2)}%</p>
-  `;
+  </div>`;
 }
-
 </script>
 
 </body>
