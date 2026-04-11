@@ -7,9 +7,15 @@
 <style>
 body {
   font-family: Arial;
-  background: #0f172a;
+  background: linear-gradient(135deg,#0f172a,#1e293b);
   color: white;
   text-align: center;
+  animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+  from {opacity:0;}
+  to {opacity:1;}
 }
 
 .container {
@@ -20,18 +26,29 @@ select, button {
   padding: 10px;
   margin: 10px;
   font-size: 16px;
+  border-radius: 8px;
+  border: none;
+}
+
+button {
+  background: #22c55e;
+  color: white;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.1);
 }
 
 .question {
   margin: 15px 0;
   text-align: left;
+  animation: slideUp 0.5s ease;
 }
 
-button {
-  background: #22c55e;
-  border: none;
-  border-radius: 8px;
-  color: white;
+@keyframes slideUp {
+  from {transform: translateY(20px); opacity:0;}
+  to {transform: translateY(0); opacity:1;}
 }
 </style>
 </head>
@@ -42,19 +59,6 @@ button {
 
 <div class="container" id="setup">
 
-<select id="class">
-<option>Class 1</option>
-<option>Class 2</option>
-<option>Class 3</option>
-<option>Class 4</option>
-<option>Class 5</option>
-<option>Class 6</option>
-<option>Class 7</option>
-<option>Class 8</option>
-<option>Class 9</option>
-<option>Class 10</option>
-</select>
-
 <select id="subject">
 <option>Maths</option>
 <option>Science</option>
@@ -63,9 +67,9 @@ button {
 </select>
 
 <select id="count">
-<option>5</option>
-<option>10</option>
-<option>20</option>
+<option value="5">5</option>
+<option value="10">10</option>
+<option value="20">20</option>
 </select>
 
 <br>
@@ -78,31 +82,16 @@ button {
 <script>
 
 let questions = [
-{
-q: "2 + 2 = ?",
-options: ["3","4","5","6"],
-answer: "4"
-},
-{
-q: "Capital of India?",
-options: ["Delhi","Mumbai","Kolkata","Chennai"],
-answer: "Delhi"
-},
-{
-q: "Water formula?",
-options: ["H2O","CO2","O2","NaCl"],
-answer: "H2O"
-},
-{
-q: "5 x 5 = ?",
-options: ["10","20","25","30"],
-answer: "25"
-},
-{
-q: "Sun is a?",
-options: ["Planet","Star","Moon","Galaxy"],
-answer: "Star"
-}
+{subject:"Maths", q:"2+2=?", options:["3","4","5","6"], answer:"4"},
+{subject:"Maths", q:"5x5=?", options:["20","25","30","35"], answer:"25"},
+{subject:"Science", q:"H2O is?", options:["Water","Oxygen","Hydrogen","Salt"], answer:"Water"},
+{subject:"Science", q:"Sun is?", options:["Planet","Star","Moon","Gas"], answer:"Star"},
+{subject:"SST", q:"Capital of India?", options:["Delhi","Mumbai","Kolkata","Chennai"], answer:"Delhi"},
+{subject:"English", q:"Opposite of big?", options:["Small","Tall","Short","Fat"], answer:"Small"},
+{subject:"Maths", q:"10/2=?", options:["2","3","5","6"], answer:"5"},
+{subject:"Science", q:"Earth is?", options:["Star","Planet","Galaxy","Moon"], answer:"Planet"},
+{subject:"SST", q:"India got independence in?", options:["1947","1950","1930","1960"], answer:"1947"},
+{subject:"English", q:"Plural of child?", options:["Childs","Children","Childes","Child"], answer:"Children"}
 ];
 
 let selected = [];
@@ -110,9 +99,12 @@ let selected = [];
 function startQuiz(){
   document.getElementById("setup").style.display="none";
 
-  let count = document.getElementById("count").value;
+  let subject = document.getElementById("subject").value;
+  let count = parseInt(document.getElementById("count").value);
 
-  selected = questions.sort(() => 0.5 - Math.random()).slice(0,count);
+  let filtered = questions.filter(q => q.subject === subject);
+
+  selected = filtered.sort(() => 0.5 - Math.random()).slice(0, count);
 
   let html = "";
 
@@ -145,7 +137,7 @@ function submitQuiz(){
   let percent = (score/selected.length)*100;
 
   document.getElementById("quiz").innerHTML = `
-  <h2>Result</h2>
+  <h2>🎯 Result</h2>
   <p>Correct: ${score}</p>
   <p>Total: ${selected.length}</p>
   <p>Percentage: ${percent.toFixed(2)}%</p>
