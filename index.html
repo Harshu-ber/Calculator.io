@@ -1,162 +1,157 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Calculator Hub Pro</title>
+<title>Student Quiz Hub</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body {
-  margin: 0;
   font-family: Arial;
-  background: linear-gradient(135deg, #0f172a, #1e293b);
+  background: #0f172a;
   color: white;
   text-align: center;
 }
 
-h1 {
+.container {
   padding: 20px;
 }
 
-.section {
-  background: #1e293b;
-  margin: 20px auto;
-  padding: 20px;
-  border-radius: 15px;
-  max-width: 400px;
-  box-shadow: 0 0 10px #000;
+select, button {
+  padding: 10px;
+  margin: 10px;
+  font-size: 16px;
 }
 
-input {
-  width: 90%;
-  height: 45px;
-  font-size: 18px;
-  margin: 10px 0;
-  border-radius: 10px;
-  border: none;
-  text-align: center;
-}
-
-.calc-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+.question {
+  margin: 15px 0;
+  text-align: left;
 }
 
 button {
-  width: 100%;
-  height: 60px;
-  font-size: 18px;
-  border-radius: 10px;
-  border: none;
   background: #22c55e;
+  border: none;
+  border-radius: 8px;
   color: white;
-}
-
-button:active {
-  background: #16a34a;
-}
-
-.big-btn {
-  width: 100%;
-  height: 50px;
-  margin-top: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>🔥 Calculator Hub Pro</h1>
+<h1>📚 Student Quiz Hub</h1>
 
-<!-- BASIC CALCULATOR -->
-<div class="section">
-<h2>Basic Calculator</h2>
+<div class="container" id="setup">
 
-<input type="text" id="result" disabled>
+<select id="class">
+<option>Class 1</option>
+<option>Class 2</option>
+<option>Class 3</option>
+<option>Class 4</option>
+<option>Class 5</option>
+<option>Class 6</option>
+<option>Class 7</option>
+<option>Class 8</option>
+<option>Class 9</option>
+<option>Class 10</option>
+</select>
 
-<div class="calc-grid">
-<button onclick="add('7')">7</button>
-<button onclick="add('8')">8</button>
-<button onclick="add('9')">9</button>
-<button onclick="add('/')">/</button>
+<select id="subject">
+<option>Maths</option>
+<option>Science</option>
+<option>SST</option>
+<option>English</option>
+</select>
 
-<button onclick="add('4')">4</button>
-<button onclick="add('5')">5</button>
-<button onclick="add('6')">6</button>
-<button onclick="add('*')">*</button>
+<select id="count">
+<option>5</option>
+<option>10</option>
+<option>20</option>
+</select>
 
-<button onclick="add('1')">1</button>
-<button onclick="add('2')">2</button>
-<button onclick="add('3')">3</button>
-<button onclick="add('-')">-</button>
+<br>
+<button onclick="startQuiz()">Start Quiz</button>
 
-<button onclick="add('0')">0</button>
-<button onclick="calculate()">=</button>
-<button onclick="clearResult()">C</button>
-<button onclick="add('+')">+</button>
-</div>
-</div>
-
-<!-- PERCENTAGE -->
-<div class="section">
-<h2>Percentage Calculator</h2>
-<input type="number" id="num" placeholder="Enter number">
-<input type="number" id="percent" placeholder="Enter %">
-<button class="big-btn" onclick="calcPercent()">Calculate</button>
-<h3 id="percentResult"></h3>
 </div>
 
-<!-- AGE -->
-<div class="section">
-<h2>Age Calculator</h2>
-<input type="date" id="dob">
-<button class="big-btn" onclick="calcAge()">Find Age</button>
-<h3 id="ageResult"></h3>
-</div>
-
-<!-- BMI -->
-<div class="section">
-<h2>BMI Calculator</h2>
-<input type="number" id="weight" placeholder="Weight (kg)">
-<input type="number" id="height" placeholder="Height (cm)">
-<button class="big-btn" onclick="calcBMI()">Check BMI</button>
-<h3 id="bmiResult"></h3>
-</div>
+<div id="quiz"></div>
 
 <script>
-function add(val){
-  document.getElementById("result").value += val;
+
+let questions = [
+{
+q: "2 + 2 = ?",
+options: ["3","4","5","6"],
+answer: "4"
+},
+{
+q: "Capital of India?",
+options: ["Delhi","Mumbai","Kolkata","Chennai"],
+answer: "Delhi"
+},
+{
+q: "Water formula?",
+options: ["H2O","CO2","O2","NaCl"],
+answer: "H2O"
+},
+{
+q: "5 x 5 = ?",
+options: ["10","20","25","30"],
+answer: "25"
+},
+{
+q: "Sun is a?",
+options: ["Planet","Star","Moon","Galaxy"],
+answer: "Star"
+}
+];
+
+let selected = [];
+
+function startQuiz(){
+  document.getElementById("setup").style.display="none";
+
+  let count = document.getElementById("count").value;
+
+  selected = questions.sort(() => 0.5 - Math.random()).slice(0,count);
+
+  let html = "";
+
+  selected.forEach((q,i)=>{
+    html += `<div class="question">
+    <p>${i+1}. ${q.q}</p>`;
+
+    q.options.forEach(opt=>{
+      html += `<input type="radio" name="q${i}" value="${opt}"> ${opt}<br>`;
+    });
+
+    html += "</div>";
+  });
+
+  html += `<button onclick="submitQuiz()">Submit</button>`;
+
+  document.getElementById("quiz").innerHTML = html;
 }
 
-function calculate(){
-  let x = document.getElementById("result").value;
-  document.getElementById("result").value = eval(x);
+function submitQuiz(){
+  let score = 0;
+
+  selected.forEach((q,i)=>{
+    let ans = document.querySelector(`input[name="q${i}"]:checked`);
+    if(ans && ans.value === q.answer){
+      score++;
+    }
+  });
+
+  let percent = (score/selected.length)*100;
+
+  document.getElementById("quiz").innerHTML = `
+  <h2>Result</h2>
+  <p>Correct: ${score}</p>
+  <p>Total: ${selected.length}</p>
+  <p>Percentage: ${percent.toFixed(2)}%</p>
+  `;
 }
 
-function clearResult(){
-  document.getElementById("result").value = "";
-}
-
-function calcPercent(){
-  let num = document.getElementById("num").value;
-  let per = document.getElementById("percent").value;
-  let res = (num * per) / 100;
-  document.getElementById("percentResult").innerText = "Result: " + res;
-}
-
-function calcAge(){
-  let dob = new Date(document.getElementById("dob").value);
-  let today = new Date();
-  let age = today.getFullYear() - dob.getFullYear();
-  document.getElementById("ageResult").innerText = "Age: " + age + " years";
-}
-
-function calcBMI(){
-  let w = document.getElementById("weight").value;
-  let h = document.getElementById("height").value / 100;
-  let bmi = (w / (h*h)).toFixed(2);
-  document.getElementById("bmiResult").innerText = "BMI: " + bmi;
-}
 </script>
 
 </body>
